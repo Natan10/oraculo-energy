@@ -3,16 +3,23 @@
   "author": "natan-moreira1@hotmail.com",
   "description": "Lumi tecnical challenger",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
-    "dev": "tsx watch index.ts",
+    "dev": "tsx watch src/http/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "license": "ISC",
   "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
     "@types/node": "^22.13.16",
+    "prisma": "^6.5.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0"
   }
 }
