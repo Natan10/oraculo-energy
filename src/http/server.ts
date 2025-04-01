@@ -3,7 +3,7 @@ import cors from "cors";
 
 /* 
 TODO: Config inicial ✅
-TODO: Config Prisma
+TODO: Config Prisma ✅
 TODO: Config Docker
 
 TODO: Business Rules
