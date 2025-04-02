@@ -3,6 +3,7 @@
   "author": "natan-moreira1@hotmail.com",
   "description": "Lumi tecnical challenger",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "dev": "tsx watch src/http/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,6 +14,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/node": "^22.13.16",
+    "@types/pdf-parse": "^1.1.4",
     "prisma": "^6.5.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
@@ -21,6 +23,8 @@
     "@prisma/client": "^6.5.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "pdf-parse": "^1.1.1",
+    "pdf-parse-debugging-disabled": "^1.1.1"
   }
 }
