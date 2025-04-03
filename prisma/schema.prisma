@@ -3,10 +3,39 @@
 
 generator client {
   provider = "prisma-client-js"
-  output = "../generated/prisma"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+// TODO: rename this for user information bill model
+model UserInformationBill {
+  id String @id @default(uuid())
+
+  clientNumber  String?
+  installNumber String?
+  month         String?
+  year          String?
+
+  electricityConsumption Int // KwH
+  totalValueWithoutGD    Int
+  economyGD              Int // Energia GD R$
+  compensatedEnergy      Int // Energia GD KwH
+
+  electricityValue    Int?
+  electricityQuantity Int?
+
+  electricityICMSValue    Int?
+  electricityICMSQuantity Int?
+
+  publicContrib Int?
+
+  filePath String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("informations")
 }

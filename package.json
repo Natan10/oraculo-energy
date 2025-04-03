@@ -5,7 +5,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/http/server.ts",
+    "dev": "tsx watch src/application/infra/http-server.ts",
+    "worker": "tsx src/application/infra/worker.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -25,6 +26,7 @@
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "pdf-parse": "^1.1.1",
-    "pdf-parse-debugging-disabled": "^1.1.1"
+    "pdf-parse-debugging-disabled": "^1.1.1",
+    "pino": "^9.6.0"
   }
 }
