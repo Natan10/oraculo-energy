@@ -1,7 +1,7 @@
 import { ProcessFileService } from "../process-file-service.js";
 import { IInformationProcessor } from "../process-information.js";
 
-interface RawEnergyBillDto {
+interface RawUserEnergyBillDto {
   numberClient: string | null;
   installNumber: string | null;
   referenceMonth: string | null;
@@ -18,24 +18,27 @@ interface RawEnergyBillDto {
     value: number;
   } | null; // Energia compensada GD
   publicContrib: number | null; // Iluminacao publica
+  filePath: string;
 }
 
-class EnergyBillProcessor implements IInformationProcessor<RawEnergyBillDto> {
+class UserEnergyBillProcessor
+  implements IInformationProcessor<RawUserEnergyBillDto>
+{
   constructor(private readonly processFileService: ProcessFileService) {}
 
   async process() {
     const paths = this.processFileService.getPaths();
-    const rawObjects: RawEnergyBillDto[] = [];
+    const rawObjects: RawUserEnergyBillDto[] = [];
 
     for (const path of paths) {
       const content = await this.processFileService.readFile(path);
-      rawObjects.push(this.#mapTo(content));
+      rawObjects.push(this.#mapTo(content, path));
     }
 
     return rawObjects;
   }
 
-  #mapTo(content: string[]) {
+  #mapTo(content: string[], path: string) {
     const referenceMonth = this.#getReferenceMonth(content);
     const numberClient = this.#getNumberOfClient(content);
     const installNumber = this.#getInstalationNumber(content);
@@ -44,7 +47,7 @@ class EnergyBillProcessor implements IInformationProcessor<RawEnergyBillDto> {
     const publicContrib = this.#getPublicContribution(content);
     const electricityGD = this.#getEnergyGD(content);
 
-    const payload: RawEnergyBillDto = {
+    const payload: RawUserEnergyBillDto = {
       electricity,
       referenceMonth,
       electricityGD,
@@ -52,6 +55,7 @@ class EnergyBillProcessor implements IInformationProcessor<RawEnergyBillDto> {
       numberClient,
       installNumber,
       publicContrib,
+      filePath: path,
     };
 
     return payload;
@@ -169,4 +173,4 @@ class EnergyBillProcessor implements IInformationProcessor<RawEnergyBillDto> {
   }
 }
 
-export { EnergyBillProcessor };
+export { UserEnergyBillProcessor };
