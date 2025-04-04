@@ -1,8 +1,9 @@
 import express from "express";
 import cors from "cors";
-import pdf from "pdf-parse-debugging-disabled";
 
 import "dotenv/config";
+
+import { router } from "./http-routes.js";
 
 /* 
 TODO: Config inicial ✅
@@ -13,21 +14,22 @@ TODO: Business Rules
   - Ler Arquivos ✅
   - Ler PDF ✅
   - Extrair Info ✅
-  - Criar Classes
+  - Criar Classes ✅
+
+TODO: Worker pulling AWS Sqs
 
 TODO: Refact do codigo
 */
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+export function runApplication(port: number) {
+  const app = express();
 
-app.use(cors());
-app.use(express.json());
+  app.use(cors());
+  app.use(express.json());
 
-app.get("/hello", (_, res) => {
-  return res.json({ message: "hello" });
-});
+  app.use(router);
 
-app.listen(PORT, () => {
-  console.log(`server running on port ${PORT}`);
-});
+  app.listen(port, () => {
+    console.log(`server running on port ${port}`);
+  });
+}

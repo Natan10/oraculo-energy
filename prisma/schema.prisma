@@ -20,7 +20,7 @@ model UserInformationBill {
   year          String?
 
   electricityConsumption Int // KwH
-  totalValueWithoutGD    Int
+  totalValueWithoutGD    Int // R$
   economyGD              Int // Energia GD R$
   compensatedEnergy      Int // Energia GD KwH
 

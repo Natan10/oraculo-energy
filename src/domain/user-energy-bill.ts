@@ -44,10 +44,10 @@ export class UserEnergyBill {
     this.#electricityGD = params.electricityGD;
     this.#electricityICMS = params.electricityICMS;
 
-    this.#electricityConsumption = this.#calcTotalConsumption();
+    this.#electricityConsumption = this.#calcTotalConsumption(); //kwh
     this.#compensatedEnergy = this.#electricityGD?.quantity ?? 0; // kwh
     this.#economyGD = this.#electricityGD?.value ?? 0; // R$
-    this.#totalValueWithoutGD = this.#calcTotalValue();
+    this.#totalValueWithoutGD = this.#calcTotalValue(); // R$
   }
 
   #extractInfoFromReferenceMonth(value: string) {
