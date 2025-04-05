@@ -1,5 +1,6 @@
 import { PrismaClient, UserInformationBill } from "@prisma/client";
 import { UserEnergyBill } from "../domain/user-energy-bill.js";
+import { monthMapping } from "../utils/month-maping.js";
 
 interface IUserEnergyBillRepository {
   create: (record: UserEnergyBill) => Promise<void>;
@@ -30,9 +31,10 @@ export class UserEnergyBillRepository implements IUserEnergyBillRepository {
       installNumber: payload.installNumber,
       clientNumber: payload.clientNumber,
       month: payload.month,
+      monthNumber: payload.month ? monthMapping[payload.month] : -1,
       year: payload.year,
-      economyGD: payload.economyGD,
-      compensatedEnergy: payload.compensatedEnergy,
+      economyGD: payload.economyGD, // Energia Compensada R$
+      compensatedEnergy: payload.compensatedEnergy, // Energia Compensada KWh
       electricityConsumption: payload.electricityConsumption,
       totalValueWithoutGD: payload.totalValueWithoutGD,
       electricityICMSQuantity: payload.electricityICMS?.quantity,
@@ -41,6 +43,6 @@ export class UserEnergyBillRepository implements IUserEnergyBillRepository {
       electricityValue: payload.electricity?.value,
       publicContrib: payload.publicContrib,
       filePath: payload.filePath,
-    };
+    } as UserInformationBill;
   }
 }

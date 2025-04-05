@@ -17,6 +17,7 @@ model UserInformationBill {
   clientNumber  String?
   installNumber String?
   month         String?
+  monthNumber   Int?
   year          String?
 
   electricityConsumption Int // KwH

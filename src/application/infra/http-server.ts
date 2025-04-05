@@ -21,7 +21,7 @@ TODO: Worker pulling AWS Sqs
 TODO: Refact do codigo
 */
 
-export function runApplication(port: number) {
+export async function runApplication(port: number) {
   const app = express();
 
   app.use(cors());

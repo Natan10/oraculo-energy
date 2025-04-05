@@ -24,24 +24,35 @@ router.get(`${BASE_PATH}/filterBy`, async (req, res) => {
 });
 
 router.get(`${BASE_PATH}/statistics/total`, async (req, res) => {
-  const { year } = req.query;
-  if (!year) return res.status;
+  const { startYear, endYear } = req.query;
+  if (!startYear) return res.status(404).end();
 
-  const data = await getCumulativeTotalByYear(String(year));
+  const start = String(startYear);
+  const end = endYear ? String(endYear) : undefined;
+
+  const data = await getCumulativeTotalByYear(start, end);
   return res.json(data);
 });
 
 router.get(`${BASE_PATH}/statistics/energy-results`, async (req, res) => {
-  const { year } = req.query;
-  if (!year) return res.status(404);
-  const data = await getEnergyResultsByYear(String(year));
+  const { startYear, endYear } = req.query;
+  if (!startYear) return res.status(404).end();
+
+  const start = String(startYear);
+  const end = endYear ? String(endYear) : undefined;
+
+  const data = await getEnergyResultsByYear(start, end);
   return res.json(data);
 });
 
 router.get(`${BASE_PATH}/statistics/finance-results`, async (req, res) => {
-  const { year } = req.query;
-  if (!year) return res.status(404);
-  const data = await getFinanceResultsByYear(String(year));
+  const { startYear, endYear } = req.query;
+  if (!startYear) return res.status(404).end();
+
+  const start = String(startYear);
+  const end = endYear ? String(endYear) : undefined;
+
+  const data = await getFinanceResultsByYear(start, end);
   return res.json(data);
 });
 

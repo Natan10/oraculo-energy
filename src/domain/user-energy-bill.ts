@@ -46,7 +46,7 @@ export class UserEnergyBill {
 
     this.#electricityConsumption = this.#calcTotalConsumption(); //kwh
     this.#compensatedEnergy = this.#electricityGD?.quantity ?? 0; // kwh
-    this.#economyGD = this.#electricityGD?.value ?? 0; // R$
+    this.#economyGD = this.#electricityGD ? this.#electricityGD.value * -1 : 0; // R$
     this.#totalValueWithoutGD = this.#calcTotalValue(); // R$
   }
 
