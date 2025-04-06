@@ -46,7 +46,7 @@ function App() {
                         "text-sm font-medium flex items-center gap-1"
                       )}
                     >
-                      Tasks
+                      Faturas
                     </span>
                     <FileText size={16} color={isActive ? "#02c39a" : "#000"} />
                   </div>
