@@ -1,83 +1,57 @@
 import { prisma } from "../../lib/prisma.js";
-import { Pagination } from "./dtos/pagination.js";
-import { UserBillFileDto } from "./dtos/user-bill-file.js";
-import { UserEnergyBillDto } from "./dtos/user-energy-bill.js";
+import { monthMapping } from "../../utils/month-maping.js";
 
-type FilterOptions = {
-  clientNumber?: string;
-  installNumber?: string;
-  year?: string;
-  page: number;
-  pageSize: number;
-};
-
-async function filterBillsByOptions(
-  options: FilterOptions
-): Promise<Pagination<UserEnergyBillDto>> {
-  const { page, pageSize, clientNumber, installNumber, year } = options;
-
-  const total = await prisma.userInformationBill.count();
+async function getAllUsers() {
   const records = await prisma.userInformationBill.findMany({
-    where: {
-      year: year,
-      installNumber: installNumber,
-      clientNumber: clientNumber,
+    distinct: ["clientNumber", "installNumber"],
+    select: {
+      id: true,
+      clientNumber: true,
+      installNumber: true,
     },
-    skip: (page - 1) * pageSize,
-    take: pageSize,
+    orderBy: {
+      year: "desc",
+    },
   });
 
-  const hasNextPage = page * pageSize < total;
-
-  const data = await Promise.all(
-    records.map(async (e) => {
-      const userFiles = e.clientNumber
-        ? await getUserBills(e.clientNumber)
-        : [];
-
-      return {
-        id: e.id,
-        clientNumber: e.clientNumber,
-        installNumber: e.installNumber,
-        compensatedEnergy: e.compensatedEnergy,
-        economyGD: e.economyGD,
-        electricityConsumption: e.electricityConsumption,
-        electricityICMSQuantity: e.electricityICMSQuantity,
-        electricityICMSValue: e.electricityICMSValue,
-        electricityQuantity: e.electricityQuantity,
-        electricityValue: e.electricityValue,
-        totalValueWithoutGD: e.totalValueWithoutGD,
-        month: e.month,
-        year: e.year,
-        publicContrib: e.publicContrib,
-        files: userFiles,
-      } as UserEnergyBillDto;
-    })
-  );
-
-  return {
-    data,
-    hasNextPage,
-    page: options.page,
-    pageSize: options.pageSize,
-    totalItems: total,
-  };
+  return records;
 }
 
-async function getUserBills(clientNumber: string) {
+async function getUserBills({
+  clientNumber,
+  startYear,
+  endYear,
+  months,
+}: {
+  clientNumber: string;
+  startYear?: string;
+  endYear?: string;
+  months?: number[];
+}) {
+  const allMonths = Object.values(monthMapping);
+
   const records = await prisma.userInformationBill.findMany({
     where: {
       clientNumber,
+      year: {
+        gte: startYear,
+        lte: endYear,
+      },
+      monthNumber: {
+        in: months || allMonths,
+      },
     },
-    select: {
-      clientNumber: true,
-      filePath: true,
-      month: true,
-      year: true,
+    orderBy: {
+      year: "desc",
     },
   });
 
-  return records as UserBillFileDto[];
+  return records.reduce((acc: any, item) => {
+    const key = item.year;
+    if (!acc[key!]) acc[key!] = [];
+    acc[key!].push(item);
+    return acc;
+  }, {});
 }
 
-export { getUserBills, filterBillsByOptions };
+export { getUserBills, getAllUsers };

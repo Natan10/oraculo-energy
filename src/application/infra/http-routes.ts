@@ -1,5 +1,9 @@
-import { Router } from "express";
-import { filterBillsByOptions } from "../queries/filter-bills-by-options.js";
+import e, { Router } from "express";
+import {
+  filterBillsByOptions,
+  getAllUsers,
+  getUserBills,
+} from "../queries/filter-bills-by-options.js";
 import {
   getCumulativeTotalByYear,
   getEnergyResultsByYear,
@@ -10,19 +14,26 @@ const router = Router();
 
 const BASE_PATH = "/api";
 
-router.get(`${BASE_PATH}/filterBy`, async (req, res) => {
-  const { year, clientNumber, installNumber, page, pageSize } = req.query;
-  const data = await filterBillsByOptions({
-    page: page ? Number(page) : 1,
-    pageSize: pageSize ? Number(pageSize) : 10,
-    year: year ? String(year) : undefined,
-    clientNumber: clientNumber ? String(clientNumber) : undefined,
-    installNumber: installNumber ? String(installNumber) : undefined,
-  });
-
+router.get(`${BASE_PATH}/users`, async (req, res) => {
+  const data = await getAllUsers();
   return res.json(data);
 });
 
+router.get(`${BASE_PATH}/users/:clientNumber`, async (req, res) => {
+  const { clientNumber } = req.params;
+
+  const { start, end, month } = req.query;
+
+  const startYear = start ? String(start) : undefined;
+  const endYear = end ? String(end) : undefined;
+  const months = month ? new Array(month).flat().map(Number) : undefined;
+
+  const data = await getUserBills({ clientNumber, startYear, endYear, months });
+
+  return res.json({ data });
+});
+
+// statistics
 router.get(`${BASE_PATH}/statistics/total`, async (req, res) => {
   const { startYear, endYear } = req.query;
   if (!startYear) return res.status(404).end();
