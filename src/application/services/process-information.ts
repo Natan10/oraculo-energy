@@ -1,3 +1,3 @@
 export interface IInformationProcessor<T> {
-  process: (content: string[]) => Promise<T[]>;
+  process: ({ bucket, key }: { bucket?: string; key?: string }) => Promise<T[]>;
 }

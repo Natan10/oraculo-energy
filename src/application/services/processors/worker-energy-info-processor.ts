@@ -3,7 +3,7 @@ import { IInformationProcessor } from "../process-information.js";
 import { RawUserEnergyBillDto } from "../raw-energy-bill-dto.js";
 import { CommonInfoProcessor } from "./common-info-processor.js";
 
-class UserEnergyBillProcessor
+export class WorknerEnergyInfoProcessor
   extends CommonInfoProcessor
   implements IInformationProcessor<RawUserEnergyBillDto>
 {
@@ -12,16 +12,13 @@ class UserEnergyBillProcessor
   }
 
   async process({ bucket, key }: { bucket?: string; key?: string }) {
-    const paths = this.processFileService.getPaths();
-    const rawObjects: RawUserEnergyBillDto[] = [];
+    if (!bucket || !key) return [];
 
-    for (const path of paths) {
-      const content = await this.processFileService.readFile(path);
-      rawObjects.push(this.mapTo(content, path));
-    }
-
-    return rawObjects;
+    const content = await this.processFileService.getFileFromS3({
+      bucket,
+      key,
+    });
+    const fileContent = this.mapTo(content, "");
+    return [fileContent];
   }
 }
-
-export { UserEnergyBillProcessor };

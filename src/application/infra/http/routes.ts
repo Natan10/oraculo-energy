@@ -1,14 +1,13 @@
 import e, { Router } from "express";
 import {
-  filterBillsByOptions,
   getAllUsers,
   getUserBills,
-} from "../queries/filter-bills-by-options.js";
+} from "../../queries/filter-bills-by-options.js";
 import {
   getCumulativeTotalByYear,
   getEnergyResultsByYear,
   getFinanceResultsByYear,
-} from "../queries/get-statistics.js";
+} from "../../queries/get-statistics.js";
 
 const router = Router();
 

@@ -1,14 +1,14 @@
 import path from "path";
-import { __dirname, __filename } from "../index.js";
+import { __dirname, __filename } from "../../index.js";
 
 import "dotenv/config";
 
-import { ProcessFileService } from "../services/process-file-service.js";
-import { UserEnergyBillProcessor } from "../services/processors/raw-energy-info-processor.js";
-import { UserEnergyBillRepository } from "../../data/user-enegy-bill.repository.js";
-import { UserEnergyBill } from "../../domain/user-energy-bill.js";
-import { prisma } from "../../lib/prisma.js";
-import { logger } from "../../lib/logger.js";
+import { ProcessFileService } from "../../services/process-file-service.js";
+import { UserEnergyBillProcessor } from "../../services/processors/raw-energy-info-processor.js";
+import { UserEnergyBillRepository } from "../../../data/user-enegy-bill.repository.js";
+import { UserEnergyBill } from "../../../domain/user-energy-bill.js";
+import { prisma } from "../../../lib/prisma.js";
+import { logger } from "../../../lib/logger.js";
 
 const BASE_PATH = path.join(__dirname, "./../faturas");
 
@@ -17,7 +17,7 @@ async function saveInformationsOnDatabase() {
   const processFileService = new ProcessFileService(BASE_PATH);
   const energyProcessor = new UserEnergyBillProcessor(processFileService);
 
-  const results = await energyProcessor.process();
+  const results = await energyProcessor.process({});
 
   logger.info(null, "processed files");
 
