@@ -17,7 +17,7 @@ async function pollMessagesJob(job: Job) {
   try {
     const command = new ReceiveMessageCommand({
       QueueUrl: process.env.AWS_SQS_URL,
-      MaxNumberOfMessages: 10,
+      MaxNumberOfMessages: 1,
       WaitTimeSeconds: 20,
       MessageAttributeNames: ["All"],
     });
@@ -33,36 +33,33 @@ async function pollMessagesJob(job: Job) {
         prisma
       );
 
-      const promises = response.Messages.map(async (message) => {
-        if (!message.Body) {
-          logger.info(`[ended job]: id:${job.id} timestamp: ${job.timestamp}`);
-          return;
+      for (const message of response.Messages) {
+        if (message.Body) {
+          const payload = parseMessage(message.Body);
+          const [fileData] = await workerProcessor.process({
+            bucket: payload.bucket,
+            key: payload.fileName,
+          });
+
+          const data = new UserEnergyBill({
+            electricity: fileData.electricity,
+            electricityGD: fileData.electricityGD,
+            electricityICMS: fileData.electricityICMS,
+            clientNumber: fileData.numberClient,
+            installNumber: fileData.installNumber,
+            publicContrib: fileData.publicContrib,
+            referenceMonth: fileData.referenceMonth,
+            filePath: payload.path,
+          });
+          await userInformationBillRepository.create(data);
+          if (message.ReceiptHandle) await removeMessage(message.ReceiptHandle);
+          logger.info(`processed job: ${job.id}`);
+        } else {
+          logger.info(`skiped job: ${job.id}`);
         }
-
-        const payload = parseMessage(message.Body);
-        const [fileData] = await workerProcessor.process({
-          bucket: payload.bucket,
-          key: payload.fileName,
-        });
-
-        const data = new UserEnergyBill({
-          electricity: fileData.electricity,
-          electricityGD: fileData.electricityGD,
-          electricityICMS: fileData.electricityICMS,
-          clientNumber: fileData.numberClient,
-          installNumber: fileData.installNumber,
-          publicContrib: fileData.publicContrib,
-          referenceMonth: fileData.referenceMonth,
-          filePath: payload.path,
-        });
-
-        await userInformationBillRepository.create(data);
-        if (message.ReceiptHandle) await removeMessage(message.ReceiptHandle);
-      });
-
-      await Promise.allSettled(promises);
+      }
+      logger.info(`end pooling job: ${Date.now()}`);
     }
-    logger.info(`end pooling job: ${Date.now()}`);
   } catch (e: any) {
     console.error(e);
     logger.error(`error pooling job: ${e.message} `);

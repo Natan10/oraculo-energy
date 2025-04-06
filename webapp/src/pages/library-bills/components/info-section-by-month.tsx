@@ -49,12 +49,16 @@ export function InfoSectionMonthContainer({
 }: {
   data: UserInformationBill[];
 }) {
+  const sorted = data.sort((a, b) => {
+    if (a.monthNumber > b.monthNumber) return 1;
+    return -1;
+  });
   return (
     <div className="py-3">
       <h2 className="text-base md:text-lg font-mono font-semibold">
         Informativos
       </h2>
-      {data.map((info, index) => (
+      {sorted.map((info, index) => (
         <>
           <InfoSectionByMonth key={info.id} data={info} />
           {index < data.length - 1 && <Separator className="h-1 w-full" />}
