@@ -1,5 +1,5 @@
 import path from "path";
-import { __dirname, __filename } from "../../index.js";
+import { __dirname } from "../../index.js";
 
 import "dotenv/config";
 
