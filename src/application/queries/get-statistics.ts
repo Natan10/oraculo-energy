@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma.js";
-import { mapMonth, monthMapping } from "../../utils/month-maping.js";
+import { mapMonth } from "../../utils/month-maping.js";
 
 async function getEnergyResultsByYear(startYear: string, endYear?: string) {
   const results = await prisma.userInformationBill.groupBy({

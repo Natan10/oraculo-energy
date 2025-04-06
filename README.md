@@ -5,6 +5,7 @@ Este projeto é composto por três partes principais: uma API backend em Node.js
 ![Arquitetura](./arquitetura.PNG)
 
 ---
+</br>
 
 ## 🧱 1. Backend - API Node.js
 
@@ -22,7 +23,7 @@ A API segue uma arquitetura em camadas, separando bem as responsabilidades:
 
 A API é responsável por expor endpoints utilizados pela aplicação web, além de interagir com o banco de dados para leitura e gravação de dados.
 
----
+</br>
 
 ## ⚙️ 2. Processamento Assíncrono - Background Jobs e Workers
 
@@ -40,7 +41,7 @@ A segunda parte da aplicação lida com o processamento de dados de forma assín
 - Além do background job automático, existe um **worker manual**, responsável por processar arquivos armazenados localmente em uma pasta.
 - Ele extrai as informações necessárias de arquivos (como faturas, por exemplo) e salva no banco de dados.
 
----
+</br>
 
 ## 🖥️ 3. Frontend - Aplicação Web React
 
@@ -57,7 +58,7 @@ A interface web foi desenvolvida utilizando **React**.
 
 A aplicação permite a visualização e interação com os dados processados, oferecendo uma interface amigável para o usuário final.
 
----
+</br>
 
 ### 🔄 Como Rodar
 
@@ -111,7 +112,7 @@ AWS_SECRET_KEY=
   npx prisma migrate deploy
 ~~~
 
----
+</br>
 
 ## ✅ Conclusão
 
